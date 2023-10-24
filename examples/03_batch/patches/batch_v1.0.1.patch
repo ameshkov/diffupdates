@@ -1,0 +1,10 @@
+f ../list1/list1.txt 521e55854e8cc4c7eda99da2844535e88e237de8 4
+d2 2
+a3 2
+! Diff-Path: ../patches/batch_v1.0.2.patch
+||example.net^
+f ../list2/list2.txt e60962babcb722b51ad784c2b8fc0ec16c4f090c 4
+d2 2
+a3 2
+! Diff-Path: ../patches/batch_v1.0.2.patch
+||test.net^

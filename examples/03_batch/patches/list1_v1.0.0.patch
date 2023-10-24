@@ -1,0 +1,5 @@
+f ../list1/list1.txt 76ad224737a93b407dca319c46587fe394f1c557 4
+d2 2
+a3 2
+! Diff-Path: ../patches/batch_v1.0.1.patch
+||example.com^
