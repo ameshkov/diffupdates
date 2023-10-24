@@ -20,7 +20,7 @@ FILENAME="list1/list1_v1.0.1.txt" && \
 PATCHFILE="patches/list1_v1.0.0.patch" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "f ../list1/list1.txt $SHASUM $NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list1 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Calculating the RFC diff for list2_v1.0.1.txt.
@@ -31,7 +31,7 @@ FILENAME="list2/list2_v1.0.1.txt" && \
 PATCHFILE="patches/list2_v1.0.0.patch" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "f ../list2/list2.txt $SHASUM $NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list2 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Concatenate files into a batch diff file.
@@ -49,7 +49,7 @@ FILENAME="list1/list1.txt" && \
 PATCHFILE="patches/list1_v1.0.1.patch" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "f ../list1/list1.txt $SHASUM $NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list1 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Calculating the RFC diff for list2_v1.0.1.txt.
@@ -60,7 +60,7 @@ FILENAME="list2/list2.txt" && \
 PATCHFILE="patches/list2_v1.0.1.patch" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "f ../list2/list2.txt $SHASUM $NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list2 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Concatenate files into a batch diff file.

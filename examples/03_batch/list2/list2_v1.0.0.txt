@@ -1,3 +1,4 @@
 ! Title: Batch-Updatable List 2
 ! Diff-Path: ../patches/batch_v1.0.0.patch
+! Diff-Name: list1
 ||test.org^

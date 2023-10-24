@@ -1,5 +1,7 @@
-f ../list2/list2.txt e60962babcb722b51ad784c2b8fc0ec16c4f090c 4
-d2 2
-a3 2
+diff name:list2 checksum:ad03f3c6ea989c336d1d2fa4f4f19aa397c57375 lines:6
+d2 1
+a2 1
 ! Diff-Path: ../patches/batch_v1.0.2.patch
+d4 1
+a4 1
 ||test.net^
