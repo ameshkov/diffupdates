@@ -43,14 +43,14 @@ This is essentially a time-to-live (TTL) for the differential update. It dictate
 
 We propose using the [RCS format](https://www.gnu.org/software/diffutils/manual/diffutils.html#RCS) for the diff files. This format is widely used in the software development industry and is well documented. It is also supported by the `patch` utility which is available on most operating systems.
 
-In order to support batch updates and validation of the result, the format is extended with the `f` command:
+In order to support batch updates and validation of the result, the format is extended with the `f` directive:
 `f [filename] [sha1sum] [numlines]`
 
 * `filename` - a name or a relative path of the file to be patched. See batch updates below for more information on this.
 * `sha1sum` - the expected sha1sum of the file after the patch is applied. This is used to validate the patch.
 * `numlines` - the number of lines that follow that make up the RCS diff block. Note, that `numlines` are counted using the same algorithm as used by `wc -l`, i.e. it basically counts `\n`.
 
-**IMPORTANT** The `f` command is optional.
+**IMPORTANT** The `f` directive is optional.
 
 ### Algorithm
 
@@ -72,7 +72,7 @@ Any unexpected error during the update process should be treated as a fatal erro
 
 ### Batch Updates
 
-The mechanism allows having a single diff file for multiple filter lists. This is achieved by using the `f` command in the diff file. The `f` command is used to specify the name of the file to be patched. The ad blocker should apply the patch only if the name of the file matches the name of the filter list.
+The mechanism allows having a single diff file for multiple filter lists. This is achieved by using the `f` directive in the diff file. The `f` directive is used to specify the name of the file to be patched. The ad blocker should apply the patch only if the name of the file matches the name of the filter list.
 
 * There is one important limitation: all filter lists that are updated using the same patch file MUST be hosted on the same server.
 * If a file specified inside the batch patch is not installed on the user's device, the patch for this file should be ignored.
@@ -104,10 +104,6 @@ Let's take an example:
 * `batch.patch`
 
   A file that contains patches for both `list1.txt` and `list2.txt`. The `f` directive allows applying this patch to both `list1.txt` and `list2.txt`. Note, that the file path in the `f` directive is relative to the patch file location.
-
-    ```diff
-
-    ```diff
 
     ```diff
     f ../list1/list1.txt [checksum] 3

@@ -1,6 +1,6 @@
 # Diff Example With Validation
 
-Example of a filter list with differential updates support where the diff files also contain the `f` command that can be used to validate the patching result.
+Example of a filter list with differential updates support where the diff files also contain the `f` directive that can be used to validate the patching result.
 
 * [filter_v1.0.0.txt](./filter_v1.0.0.txt) - the oldest version of the list.
 * [patches/v1.0.0.patch](./patches/v1.0.0.patch) - a patch that provides differential update from `v1.0.0` to `v1.0.1`.
