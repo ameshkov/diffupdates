@@ -71,7 +71,12 @@ In order to support batch updates and be able to validate patch result, the stan
 1. If the differential update is available, download and apply it to the current filter list.
     * Once the differential update is applied, the `Diff-Path` within the list will be updated to point to the next differential update.
     * At this point the ad blocker may decide either to wait for the `Diff-Expires` period and then try again or to immediately try to fetch the next differential update.
-1. If the differential update is not available, i.e. the server returns `404 Not Found`, then the ad blocker wait for the `Diff-Expires` period and then try again.
+1. If the differential update is not available the server may signal about that by returning one of the following responses:
+    * `404 Not Found`
+    * `200 OK` with empty content (content length is 0)
+    * `204 No Content`
+
+    In this case the ad blocker wait for the `Diff-Expires` period and then try again.
 
 #### 2. Set Update Timer
 
@@ -124,11 +129,11 @@ Let's take an example:
   A file that contains patches for both `list1.txt` and `list2.txt`. It uses the `diff name:` directive to point at which patch should be applied to which list.
 
     ```diff
-    diff name:list1 checksum:atatata lines:3
+    diff name:list1 checksum:e3c9c883378dc2a3aec9f71578c849891243bc2c lines:3
     d2 1
     a2 1
     ! Diff-Path: patches/batch_new.patch
-    diff name:list2 checksum:atatata lines:3
+    diff name:list2 checksum:be09384422b8d7f20da517d1245360125868f0b9 lines:3
     d2 1
     a2 1
     ! Diff-Path: patches/batch_new.patch
