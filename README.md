@@ -76,7 +76,7 @@ In order to support batch updates and be able to validate patch result, the stan
     * `200 OK` with empty content (content length is 0)
     * `204 No Content`
 
-    In this case the ad blocker wait for the `Diff-Expires` period and then try again.
+    In this case the ad blocker SHOULD wait for the `Diff-Expires` period and then try again.
 
 #### 2. Set Update Timer
 
