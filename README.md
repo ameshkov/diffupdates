@@ -20,7 +20,7 @@ This approach significantly reduces bandwidth consumption, minimizes latency, an
 
 ### Changes To Filter Lists Metadata
 
-In order to use the differential update mechanism, we propose two new metadata fields.
+In order to use the differential update mechanism, we propose several new metadata fields.
 
 #### `! Diff-Path:`
 
@@ -28,6 +28,13 @@ This field will provide the relative path where the differential file (diff) for
 
 * `Diff-Path` must be a relative path to the filter list file.
 * `Diff-Path` is a mandatory field for enabling the differential updates mechanism.
+
+#### `! Diff-Name:`
+
+This field is only mandatory for filter lists that support batch differential updates. It specifies the name of the resource to be patched. See the [Batch Updates](#batch-updates) section for more details.
+
+* `Diff-Name` must be a string of length 1-64. Validation regex: `[a-zA-Z0-9-_ ]{1,64}`.
+* `Diff-Name` is only mandatory when the filter list supports batch differential updates. In all other cases it is ignored.
 
 #### `! Diff-Expires:`
 
@@ -43,39 +50,51 @@ This is essentially a time-to-live (TTL) for the differential update. It dictate
 
 We propose using the [RCS format](https://www.gnu.org/software/diffutils/manual/diffutils.html#RCS) for the diff files. This format is widely used in the software development industry and is well documented. It is also supported by the `patch` utility which is available on most operating systems.
 
-In order to support batch updates and validation of the result, the format is extended with the `f` directive:
-`f [filename] [sha1sum] [numlines]`
+In order to support batch updates and be able to validate patch result, the standard format is extended with the `diff` directive:
 
-* `filename` - a name or a relative path of the file to be patched. See batch updates below for more information on this.
-* `sha1sum` - the expected sha1sum of the file after the patch is applied. This is used to validate the patch.
-* `numlines` - the number of lines that follow that make up the RCS diff block. Note, that `numlines` are counted using the same algorithm as used by `wc -l`, i.e. it basically counts `\n`.
+`diff name:[name] checksum:[checksum] lines:[lines]`
 
-**IMPORTANT** The `f` directive is optional.
+* `name` - name of a corresponding filter list (see `Diff-Name`).
+* `checksum` - the expected SHA1 checksum of the file after the patch is applied. This is used to validate the patch.
+* `lines` - the number of lines that follow that make up the RCS diff block. Note, that `lines` are counted using the same algorithm as used by `wc -l`, i.e. it basically counts `\n`.
+
+`diff` directive is optional. If it is not specified, the patch is applied without validation.
+
+> It is recommended to use the `diff checksum:` directive to validate the patching result. This will ensure that the patch is applied correctly and the resulting file is not corrupted.
 
 ### Algorithm
 
-#### Check for Update
+#### 1. Check for Update
 
 1. Refer to the `Diff-Path` to see if a differential update is available.
+    * If there are several lists with the same `Diff-Path`, download the diff file only once. Refer to the [Batch Updates](#batch-updates) section for the details on how batch patches are applied.
 1. If the differential update is available, download and apply it to the current filter list.
     * Once the differential update is applied, the `Diff-Path` within the list will be updated to point to the next differential update.
     * At this point the ad blocker may decide either to wait for the `Diff-Expires` period and then try again or to immediately try to fetch the next differential update.
-1. If the differential update is not available, i.e. the server returns `404 Not Found`, then the ad blocker wait for the `Diff-Expires` period and then try again.
+1. If the differential update is not available the server may signal about that by returning one of the following responses:
+    * `404 Not Found`
+    * `200 OK` with empty content (content length is 0)
+    * `204 No Content`
 
-#### Set Update Timer
+    In this case the ad blocker SHOULD wait for the `Diff-Expires` period and then try again.
+
+#### 2. Set Update Timer
 
 Using the `Diff-Expires` value, set a timer for the next update check. For example, if it's set to `1 hour`, the ad blocker will wait for that duration before checking the `Diff-Path` again.
 
-#### Fallback Mechanism
+#### 3. Fallback Mechanism
 
 Any unexpected error during the update process should be treated as a fatal error and the ad blocker should wait until it is time for the full sync. Note, that it should respect the `Expires` value set by the filter list.
 
 ### Batch Updates
 
-The mechanism allows having a single diff file for multiple filter lists. This is achieved by using the `f` directive in the diff file. The `f` directive is used to specify the name of the file to be patched. The ad blocker should apply the patch only if the name of the file matches the name of the filter list.
+The mechanism allows having a single diff file for multiple filter lists. In order to achieve this, the `Diff-Name` field MUST be specified for each filter list that supports batch differential updates. The `Diff-Name` field is then used to match a filter list with its corresponding patch in the diff file. This is achieved by using the `diff name:` directive in the diff file which links a patch to a filter list.
 
-* There is one important limitation: all filter lists that are updated using the same patch file MUST be hosted on the same server.
-* If a file specified inside the batch patch is not installed on the user's device, the patch for this file should be ignored.
+* The list that is getting patched MUST have this exact patch file specified in `Diff-Path`.
+* If a filter list specified inside the batch patch is not installed in the ad blocker, the patch for this file SHOULD be ignored.
+* At least one filter list MUST be updated in result of applying the batch patch. Otherwise, the patch should be considered invalid, see [Fallback Mechanism](#3-fallback-mechanism).
+
+#### Example
 
 Let's take an example:
 
@@ -86,9 +105,11 @@ Let's take an example:
     ```adblock
     ! Title: List 1
     ! Diff-Path: ../patches/batch.patch
+    ! Diff-Name: list1
     ```
   
-  `Diff-Path` is relative to `list1.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
+  * `Diff-Path` is relative to `list1.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
+  * `Diff-Name` is mandatory for lists that support batch differential updates.
 
 * List 2
 
@@ -97,20 +118,22 @@ Let's take an example:
     ```adblock
     ! Title: List 2
     ! Diff-Path: ../patches/batch.patch
+    ! Diff-Name: list2
     ```
 
-  `Diff-Path` is relative to `list2.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
+  * `Diff-Path` is relative to `list2.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
+  * `Diff-Name` is mandatory for lists that support batch differential updates.
 
 * `batch.patch`
 
-  A file that contains patches for both `list1.txt` and `list2.txt`. The `f` directive allows applying this patch to both `list1.txt` and `list2.txt`. Note, that the file path in the `f` directive is relative to the patch file location.
+  A file that contains patches for both `list1.txt` and `list2.txt`. It uses the `diff name:` directive to point at which patch should be applied to which list.
 
     ```diff
-    f ../list1/list1.txt [checksum] 3
+    diff name:list1 checksum:e3c9c883378dc2a3aec9f71578c849891243bc2c lines:3
     d2 1
     a2 1
     ! Diff-Path: patches/batch_new.patch
-    f ../list2/list2.txt [checksum] 3
+    diff name:list2 checksum:be09384422b8d7f20da517d1245360125868f0b9 lines:3
     d2 1
     a2 1
     ! Diff-Path: patches/batch_new.patch

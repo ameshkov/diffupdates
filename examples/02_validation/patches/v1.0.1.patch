@@ -1,4 +1,4 @@
-f filter.txt e3c9c883378dc2a3aec9f71578c849891243bc2c 5
+diff checksum:e3c9c883378dc2a3aec9f71578c849891243bc2c lines:5
 d2 3
 a4 3
 ! Version: v1.0.2

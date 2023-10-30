@@ -1,6 +1,6 @@
 # Diff Example With Validation
 
-Example of a filter list with differential updates support where the diff files also contain the `f` directive that can be used to validate the patching result.
+Example of a filter list with differential updates support where the patch files also contain the `diff` directive that can be used to validate the patching result.
 
 * [filter_v1.0.0.txt](./filter_v1.0.0.txt) - the oldest version of the list.
 * [patches/v1.0.0.patch](./patches/v1.0.0.patch) - a patch that provides differential update from `v1.0.0` to `v1.0.1`.
@@ -21,7 +21,7 @@ FILENAME="filter_v1.0.1.txt" && \
 PATCHFILE="patches/v1.0.0.patch" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "f filter.txt $SHASUM $NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Calculating the RFC diff for filter.txt.
@@ -32,6 +32,6 @@ FILENAME="filter.txt" && \
 PATCHFILE="patches/v1.0.1.patch" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l $PATCHFILE | awk '{print $1}') && \
-    echo "f filter.txt $SHASUM $NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 ```
