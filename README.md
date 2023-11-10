@@ -26,12 +26,12 @@ In order to use the differential update mechanism, we propose several new metada
 
 This field will provide the relative path where the differential file (diff) for the filter list can be found. This differential file will take the user from their current version of the filter list to the next version. Crucially, within this differential update, the `Diff-Path` field will be updated to point to the subsequent version's diff. This ensures that the ad blocker knows where to find the next differential update.
 
-* `Diff-Path` must be a relative path to the filter list file, i.e. `/list.patch` or `../list.patch`.
+* `Diff-Path` must be a relative path to the filter list file, i.e. `/list.patch` or `../list.patch` or similar.
 * `Diff-Path` is a mandatory field for enabling the differential updates mechanism.
 
 #### Resource name
 
-If a list supports batch updates, the `Diff-Path` can also have a "hash" part, i.e. `/path.patch#resourceName`. This "hash" is the name of the resource to be patched. In this case, the ad blocker will only download the diff file once and then apply it to all lists that are specified in the diff file. See the [Batch Updates](#batch-updates) section for more details.
+If a list supports batch updates, the `Diff-Path` MUST also have a "hash" part, i.e. `/path.patch#resourceName`. This "hash" is the name of the resource to be patched. In this case, the ad blocker will only download the diff file once and then apply it to all lists that are specified in the diff file. See the [Batch Updates](#batch-updates) section for more details.
 
 Later in the document it will be referred as "resource name".
 
