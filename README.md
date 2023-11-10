@@ -26,15 +26,18 @@ In order to use the differential update mechanism, we propose several new metada
 
 This field will provide the relative path where the differential file (diff) for the filter list can be found. This differential file will take the user from their current version of the filter list to the next version. Crucially, within this differential update, the `Diff-Path` field will be updated to point to the subsequent version's diff. This ensures that the ad blocker knows where to find the next differential update.
 
-* `Diff-Path` must be a relative path to the filter list file.
+* `Diff-Path` must be a relative path to the filter list file, i.e. `/list.patch` or `../list.patch`.
 * `Diff-Path` is a mandatory field for enabling the differential updates mechanism.
 
-#### `! Diff-Name:`
+#### Resource name
 
-This field is only mandatory for filter lists that support batch differential updates. It specifies the name of the resource to be patched. See the [Batch Updates](#batch-updates) section for more details.
+If a list supports batch updates, the `Diff-Path` can also have a "hash" part, i.e. `/path.patch#resourceName`. This "hash" is the name of the resource to be patched. In this case, the ad blocker will only download the diff file once and then apply it to all lists that are specified in the diff file. See the [Batch Updates](#batch-updates) section for more details.
 
-* `Diff-Name` must be a string of length 1-64. Validation regex: `[a-zA-Z0-9-_ ]{1,64}`.
-* `Diff-Name` is only mandatory when the filter list supports batch differential updates. In all other cases it is ignored.
+Later in the document it will be referred as "resource name".
+
+* This part is only mandatory when the filter list supports batch differential updates.
+* The "hash" part of the URL must be a string of length 1-64. Validation regex: `[a-zA-Z0-9-_ ]{1,64}`.
+* When specified, `diff name` directive in the diff file MUST match the resource name, see [Diff Files Format](#diff-files-format) for more details.
 
 #### `! Diff-Expires:`
 
@@ -52,11 +55,12 @@ We propose using the [RCS format](https://www.gnu.org/software/diffutils/manual/
 
 In order to support batch updates and be able to validate patch result, the standard format is extended with the `diff` directive:
 
-`diff name:[name] checksum:[checksum] lines:[lines]`
+`diff name:[name] checksum:[checksum] lines:[lines] timestamp:[timestamp]`
 
-* `name` - name of a corresponding filter list (see `Diff-Name`).
+* `name` - name of a corresponding filter list. It is only mandatory when [resource name](#resource-name) is specified in the list.
 * `checksum` - the expected SHA1 checksum of the file after the patch is applied. This is used to validate the patch.
 * `lines` - the number of lines that follow that make up the RCS diff block. Note, that `lines` are counted using the same algorithm as used by `wc -l`, i.e. it basically counts `\n`.
+* `timestamp` - the timestamp of the patch. A number of milliseconds since the Unix epoch.
 
 `diff` directive is optional. If it is not specified, the patch is applied without validation.
 
@@ -88,7 +92,7 @@ Any unexpected error during the update process should be treated as a fatal erro
 
 ### Batch Updates
 
-The mechanism allows having a single diff file for multiple filter lists. In order to achieve this, the `Diff-Name` field MUST be specified for each filter list that supports batch differential updates. The `Diff-Name` field is then used to match a filter list with its corresponding patch in the diff file. This is achieved by using the `diff name:` directive in the diff file which links a patch to a filter list.
+The mechanism allows having a single diff file for multiple filter lists. In order to achieve this, the [resource name](#resource-name) MUST be specified for each filter list that supports batch differential updates. The [resource name](#resource-name) is then used to match a filter list with its corresponding patch in the diff file. This is achieved by using the `diff name:` directive in the diff file which links a patch to a filter list.
 
 * The list that is getting patched MUST have this exact patch file specified in `Diff-Path`.
 * If a filter list specified inside the batch patch is not installed in the ad blocker, the patch for this file SHOULD be ignored.
@@ -104,12 +108,11 @@ Let's take an example:
 
     ```adblock
     ! Title: List 1
-    ! Diff-Path: ../patches/batch.patch
-    ! Diff-Name: list1
+    ! Diff-Path: ../patches/batch.patch#list1
     ```
   
   * `Diff-Path` is relative to `list1.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
-  * `Diff-Name` is mandatory for lists that support batch differential updates.
+  * [Resource name](#resource-name) is set to `list1` here. It is mandatory for lists that support batch differential updates.
 
 * List 2
 
@@ -117,26 +120,25 @@ Let's take an example:
 
     ```adblock
     ! Title: List 2
-    ! Diff-Path: ../patches/batch.patch
-    ! Diff-Name: list2
+    ! Diff-Path: ../patches/batch.patch#list2
     ```
 
   * `Diff-Path` is relative to `list2.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
-  * `Diff-Name` is mandatory for lists that support batch differential updates.
+  * [Resource name](#resource-name) is set to `list2` here. It is mandatory for lists that support batch differential updates.
 
 * `batch.patch`
 
   A file that contains patches for both `list1.txt` and `list2.txt`. It uses the `diff name:` directive to point at which patch should be applied to which list.
 
-    ```diff
-    diff name:list1 checksum:e3c9c883378dc2a3aec9f71578c849891243bc2c lines:3
+   ```diff
+    diff name:list1 checksum:e3c9c883378dc2a3aec9f71578c849891243bc2c lines:3 timestamp:1699599870000
     d2 1
     a2 1
-    ! Diff-Path: patches/batch_new.patch
-    diff name:list2 checksum:be09384422b8d7f20da517d1245360125868f0b9 lines:3
+    ! Diff-Path: patches/batch_new.patch#list1
+    diff name:list2 checksum:be09384422b8d7f20da517d1245360125868f0b9 lines:3 timestamp:1699599870000
     d2 1
     a2 1
-    ! Diff-Path: patches/batch_new.patch
+    ! Diff-Path: patches/batch_new.patch#list2
     ```
 
 ### Examples

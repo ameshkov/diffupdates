@@ -19,9 +19,10 @@ diff -n filter_v1.0.0.txt filter_v1.0.1.txt > patches/v1.0.0.patch
 # Calc the SHA1 sum of filter_v1.0.1.txt and append it to the patch file.
 FILENAME="filter_v1.0.1.txt" && \
 PATCHFILE="patches/v1.0.0.patch" && \
+TIMESTAMP="$(date +%s)000" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "diff checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff checksum:$SHASUM lines:$NUMLINES timestamp:$TIMESTAMP" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Calculating the RFC diff for filter.txt.
@@ -30,8 +31,9 @@ diff -n filter_v1.0.1.txt filter.txt > patches/v1.0.1.patch
 # Calc the SHA1 sum of filter.txt and append it to the patch file.
 FILENAME="filter.txt" && \
 PATCHFILE="patches/v1.0.1.patch" && \
+TIMESTAMP="$(date +%s)000" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l $PATCHFILE | awk '{print $1}') && \
-    echo "diff checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff checksum:$SHASUM lines:$NUMLINES timestamp:$TIMESTAMP" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 ```

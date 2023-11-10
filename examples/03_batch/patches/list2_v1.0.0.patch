@@ -1,5 +1,5 @@
-f ../list2/list2.txt c97a5b68e5ee0349872d420e55e616b0bb979aee 4
+diff name:list2 checksum:a089ee91e339e4a5374dfbed8728e17e768d7c9b lines:4 timestamp:1699599870000
 d2 2
 a3 2
-! Diff-Path: ../patches/batch_v1.0.1.patch
+! Diff-Path: ../patches/batch_v1.0.1.patch#list2
 ||test.com^

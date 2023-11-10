@@ -1,7 +1,5 @@
-diff name:list2 checksum:ad03f3c6ea989c336d1d2fa4f4f19aa397c57375 lines:6
-d2 1
-a2 1
-! Diff-Path: ../patches/batch_v1.0.2.patch
-d4 1
-a4 1
+diff name:list2 checksum:e4b57a4da7fbe9072dada875695a16762b05eab2 lines:4 timestamp:1699599890000
+d2 2
+a3 2
+! Diff-Path: ../patches/batch_v1.0.2.patch#list2
 ||test.net^

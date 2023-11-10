@@ -18,9 +18,10 @@ diff -n list1/list1_v1.0.0.txt list1/list1_v1.0.1.txt > patches/list1_v1.0.0.pat
 # Calc the SHA1 sum of list1_v1.0.1.txt and prepend it to the patch file.
 FILENAME="list1/list1_v1.0.1.txt" && \
 PATCHFILE="patches/list1_v1.0.0.patch" && \
+TIMESTAMP="$(date +%s)000" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "diff name:list1 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list1 checksum:$SHASUM lines:$NUMLINES timestamp:${TIMESTAMP}" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Calculating the RFC diff for list2_v1.0.1.txt.
@@ -29,9 +30,10 @@ diff -n list2/list2_v1.0.0.txt list2/list2_v1.0.1.txt > patches/list2_v1.0.0.pat
 # Calc the SHA1 sum of list1_v1.0.1.txt and prepend it to the patch file.
 FILENAME="list2/list2_v1.0.1.txt" && \
 PATCHFILE="patches/list2_v1.0.0.patch" && \
+TIMESTAMP="$(date +%s)000" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "diff name:list2 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list2 checksum:$SHASUM lines:$NUMLINES timestamp:${TIMESTAMP}" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Concatenate files into a batch diff file.
@@ -47,9 +49,10 @@ diff -n list1/list1_v1.0.1.txt list1/list1.txt > patches/list1_v1.0.1.patch
 # Calc the SHA1 sum of list1_v1.0.1.txt and prepend it to the patch file.
 FILENAME="list1/list1.txt" && \
 PATCHFILE="patches/list1_v1.0.1.patch" && \
+TIMESTAMP="$(date +%s)000" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "diff name:list1 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list1 checksum:$SHASUM lines:$NUMLINES timestamp:${TIMESTAMP}" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Calculating the RFC diff for list2_v1.0.1.txt.
@@ -58,9 +61,10 @@ diff -n list2/list2_v1.0.1.txt list2/list2.txt > patches/list2_v1.0.1.patch
 # Calc the SHA1 sum of list1_v1.0.1.txt and prepend it to the patch file.
 FILENAME="list2/list2.txt" && \
 PATCHFILE="patches/list2_v1.0.1.patch" && \
+TIMESTAMP="$(date +%s)000" && \
 SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
     NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
-    echo "diff name:list2 checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
+    echo "diff name:list2 checksum:$SHASUM lines:$NUMLINES timestamp:${TIMESTAMP}" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
 
 # Concatenate files into a batch diff file.
