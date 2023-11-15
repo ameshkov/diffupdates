@@ -70,7 +70,7 @@ If a list supports batch updates, the `Diff-Path` MUST also have a "hash" part, 
 Later in the document it will be referred as "resource name".
 
 * This part is only mandatory when the filter list supports batch differential updates.
-* The "hash" part of the URL must be a string of length 1-64. Validation regex: `[a-zA-Z0-9-_ ]{1,64}`.
+* The "hash" part of the URL must be a string of length 1-64. Validation regex: `[a-zA-Z0-9-_]{1,64}`.
 * When specified, `diff name` directive in the diff file MUST match the resource name, see [Diff Files Format](#diff-files-format) for more details.
 
 #### `! Expires:`
