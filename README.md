@@ -40,7 +40,7 @@ ${patchName}[-${resolution}]-${epochTimestamp}-${expirationPeriod}.patch#${resou
 
 The following limitations are imposed on the `Diff-Path`:
 
-* `Diff-Path` MUST be a relative path to the filter list file, i.e. `/list-28332968-60.patch` or `../list-28332968-60.patch` or similar.
+* `Diff-Path` MUST be a relative path to the filter list file, i.e. `/list-472234-1.patch` or `../list-472234-1.patch` or similar.
 * `Diff-Path` is a mandatory field for enabling the differential updates mechanism.
 * `Diff-Path` MUST point to a file name with the name format conforming to the format described above. If the file name is different, the field is considered invalid and the differential update mechanism is disabled for the filter list.
 * `patchName` MUST be a string of length 1-64 with no spaces or other special characters. Validation regex: `[a-zA-Z0-9_.]{1,64}`.
