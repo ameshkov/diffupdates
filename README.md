@@ -29,7 +29,7 @@ This field will provide the relative path where the differential file (diff) for
 `Diff-Path` also encodes additional information in the file name:
 
 ```adblock
-${patchName}[-${resolution}]-${epochTimestampMin}-${expirationPeriodMin}.patch#${resourceName}
+${patchName}[-${resolution}]-${epochTimestamp}-${expirationPeriod}.patch#${resourceName}
 ```
 
 * `patchName` - name of the patch file, an arbitrary string to identify the patch.
@@ -44,8 +44,8 @@ The following limitations are imposed on the `Diff-Path`:
 * `Diff-Path` is a mandatory field for enabling the differential updates mechanism.
 * `Diff-Path` MUST point to a file name with the name format conforming to the format described above. If the file name is different, the field is considered invalid and the differential update mechanism is disabled for the filter list.
 * `patchName` MUST be a string of length 1-64 with no spaces or other special characters. Validation regex: `[a-zA-Z0-9_.]{1,64}`.
-* `expirationPeriodMin` MUST be a positive integer, greater than 0, lesser than 43200 (30 days).
-* `epochTimestampMin` MUST be a valid epoch timestamp in minutes.
+* `epochTimestamp` MUST be a valid epoch timestamp (considering the unit specified in the `resolution` field).
+* `expirationPeriod` MUST be a positive integer.
 * `resourceName` is an optional part, it's explained in the [Resource name](#resource-name) section.
 
 #### Examples
@@ -101,7 +101,7 @@ Note, that it is possible to extend the `diff` directive with additional fields 
 
 1. Refer to the `Diff-Path` to see if a differential update is available.
     * If there are several lists with the same `Diff-Path`, download the diff file only once. Refer to the [Batch Updates](#batch-updates) section for the details on how batch patches are applied.
-    * Calculate the patch expiration date: `${epochTimestampMin} + ${expirationPeriodMin}`. If the expiration date in the past, the patch is considered expired and the ad blocker SHOULD attempt to download the update.
+    * Calculate the patch expiration date: `(${epochTimestamp} + ${expirationPeriod}) * ${resolution}`. If the expiration date in the past, the patch is considered expired and the ad blocker SHOULD attempt to download the update.
 1. If the differential update is available, download and apply it to the current filter list.
     * If the differential update is not empty and applied, the `Diff-Path` within the list MUST be updated to point to the next differential update.
     * At this point the ad blocker may decide to wait for a while before checking for the next differential update (see [2. Set Update Timer](#2-set-update-timer)) to ensure that the server is not overloaded.
