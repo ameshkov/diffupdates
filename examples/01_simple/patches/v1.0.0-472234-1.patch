@@ -1,4 +1,5 @@
-! Title: Diff Updates Simple Example List
+d2 3
+a4 3
 ! Version: v1.0.1
 ! Diff-Path: patches/v1.0.1-472235-1.patch
 ||example.com^

@@ -1,6 +1,0 @@
-diff checksum:be09384422b8d7f20da517d1245360125868f0b9 lines:4 timestamp:1699600190000
-d2 3
-a4 3
-! Version: v1.0.1
-! Diff-Path: patches/v1.0.1.patch
-||example.com^

@@ -1,0 +1,10 @@
+diff name:list1 checksum:b8ea7b480f0423706a21a66cc2b203f495407049 lines:4
+d2 2
+a3 2
+! Diff-Path: ../patches/batch_v1.0.2-s-1700053042-3600.patch#list1
+||example.net^
+diff name:list2 checksum:2160f8ccf21038667143c512e7c4491a83fba07a lines:4
+d2 2
+a3 2
+! Diff-Path: ../patches/batch_v1.0.2-s-1700053042-3600.patch#list2
+||test.net^
