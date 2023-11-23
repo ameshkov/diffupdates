@@ -29,7 +29,7 @@ This field will provide the relative path where the differential file (diff) for
 `Diff-Path` also encodes additional information in the file name:
 
 ```adblock
-${patchName}[-${resolution}]-${epochTimestamp}-${expirationPeriod}.patch#${resourceName}
+${patchName}[-${resolution}]-${epochTimestamp}-${expirationPeriod}.patch[#${resourceName}]
 ```
 
 * `patchName` - name of the patch file, an arbitrary string to identify the patch.
