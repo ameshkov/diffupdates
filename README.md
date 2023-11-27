@@ -143,7 +143,7 @@ Let's take an example:
 
     ```adblock
     ! Title: List 1
-    ! Diff-Path: ../patches/batch-28334120-60.patch#list1
+    ! Diff-Path: ../patches/batch-m-28334120-60.patch#list1
     ```
   
   * `Diff-Path` is relative to `list1.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
@@ -156,7 +156,7 @@ Let's take an example:
 
     ```adblock
     ! Title: List 2
-    ! Diff-Path: ../patches/batch-28334120-60.patch#list2
+    ! Diff-Path: ../patches/batch-m-28334120-60.patch#list2
     ```
 
   * `Diff-Path` is relative to `list2.txt` location so the final URL of the diff file will be `https://example.com/patches/batch.patch`.
@@ -171,13 +171,13 @@ Let's take an example:
     diff name:list1 checksum:e3c9c883378dc2a3aec9f71578c849891243bc2c lines:3
     d2 1
     a2 1
-    ! Diff-Path: patches/batch_new.patch#list1
+    ! Diff-Path: patches/batchnew-m-28334180-60.patch#list1
     diff name:list2 checksum:be09384422b8d7f20da517d1245360125868f0b9 lines:3
     d2 1
     a2 1
-    ! Diff-Path: patches/batch_new.patch#list2
+    ! Diff-Path: patches/batchnew-m-28334180-60.patch#list2
     ```
 
-### Examples
+### More Examples
 
 Please find examples in the [examples directory](./examples/).
