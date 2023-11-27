@@ -1,4 +1,6 @@
-! Title: Diff Updates Simple Example List
+diff checksum:1ce52b527d56a245f32138e014b1571c19cfb659 lines:4
+d2 3
+a4 3
 ! Version: v1.0.1
 ! Diff-Path: patches/v1.0.1-m-28334120-60.patch
 ||example.com^
