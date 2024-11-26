@@ -1,13 +1,13 @@
-# Simple Diff Example
+# Checksum Example
 
 A filter list with differential updates support and a checksum attribute. The filter lists in this example are
-outfitted with a `Checksum:` attribute which enables the check for download and patch application correctness.
+outfitted with a `Checksum:` attribute which enables checking for download and patch application correctness.
 
 * [filter_v1.0.0.txt](./filter_v1.0.0.txt) - the oldest version of the list.
 * [patches/v1.0.0-472234-1.patch](./patches/v1.0.0-472234-1.patch) - a patch that provides a differential update from `v1.0.0` to `v1.0.1`.
 * [filter.txt](./filter.txt) - the final version of the list. After all differential updates are applied you should get this version.
 
-## How patch files were prepared
+## How the example files were prepared
 
 * The checksum is computed thusly:
     ```
