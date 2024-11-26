@@ -1,0 +1,5 @@
+! Title: Diff Updates Checksum Example List
+! Checksum: EXp6kQONK1z6V+8lk705zw
+! Version: v1.0.0
+! Diff-Path: patches/v1.0.0-472234-1.patch
+||example.org^
