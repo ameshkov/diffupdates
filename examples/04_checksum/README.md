@@ -11,10 +11,10 @@ outfitted with a `Checksum:` attribute which enables checking for download and p
 
 * The checksum is computed thusly:
     ```
-    cat filter_v1.0.0.txt | grep -v "! Checksum:" | awk "NF{$1=$1;print}" | head -c -1 | openssl md5 -binary | openssl base64 | sed -e "s/=*$//"
-    cat filter.txt | grep -v "! Checksum:" | awk "NF{$1=$1;print}" | head -c -1 | openssl md5 -binary | openssl base64 | sed -e "s/=*$//"
+    cat filter_v1.0.0.txt | grep -v '! Checksum:' | awk 'NF{$1=$1;print}' | head -c -1 | openssl md5 -binary | openssl base64 | sed -e 's/=*$//'
+    cat filter.txt | grep -v '! Checksum:' | awk 'NF{$1=$1;print}' | head -c -1 | openssl md5 -binary | openssl base64 | sed -e 's/=*$//'
     ```
-    That is, the line with the checksum itself, empty lines, and all leading and trailing whitespace, as well as the newline character and the end of file, is discarded before computing the checksum.
+    That is, the line with the checksum itself, empty lines, and all leading and trailing whitespace, as well as the newline character at the end of file, is discarded before computing the checksum.
     The checksum is the MD5 digest of the input, encoded in standard Base64 without padding characters.
     The line `! Checksum: <checksum>` is inserted near the beginning of the filter list.
 

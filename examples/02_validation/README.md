@@ -15,30 +15,42 @@ Note, that resolution is specified in the patch names (`m` for minutes).
 
 The patches are created using the `diff` utility:
 
+### Calculate the RCS diff for filter_v1.0.1.txt.
+
 ```shell
-# Calculating the RFC diff for filter_v1.0.1.txt.
 diff -n filter_v1.0.0.txt filter_v1.0.1.txt > patches/v1.0.0-m-28334060-60.patch
+```
 
-# Calc the SHA1 sum of filter_v1.0.1.txt and append it to the patch file.
+### Calculate the SHA1 sum of filter_v1.0.1.txt and append it to the patch file.
+
+```shell
 FILENAME="filter_v1.0.1.txt" && \
-PATCHFILE="patches/v1.0.0-m-28334060-60.patch" && \
-SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
-    NUMLINES=$(wc -l < $PATCHFILE | awk '{print $1}') && \
+    PATCHFILE="patches/v1.0.0-m-28334060-60.patch" && \
+    SHASUM=$(cat $FILENAME | awk 'NF{$1=$1;print}' | head -c -1 | openssl sha1 -binary | xxd -p) && \
+    NUMLINES=$(awk 'END {print NR}' < $PATCHFILE) && \
     echo "diff checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
+```
 
-# Calculating the RFC diff for filter.txt.
+### Calculate the RCS diff for filter.txt.
+
+```shell
 diff -n filter_v1.0.1.txt filter.txt > patches/v1.0.1-m-28334120-60.patch
+```
 
-# Calc the SHA1 sum of filter.txt and append it to the patch file.
+### Calculate the SHA1 sum of filter.txt and append it to the patch file.
+
+```shell
 FILENAME="filter.txt" && \
-PATCHFILE="patches/v1.0.1-m-28334120-60.patch" && \
-SHASUM=$(shasum -a 1 $FILENAME | awk '{print $1}') && \
-    NUMLINES=$(wc -l $PATCHFILE | awk '{print $1}') && \
+    PATCHFILE="patches/v1.0.1-m-28334120-60.patch" && \
+    SHASUM=$(cat $FILENAME | awk 'NF{$1=$1;print}' | head -c -1 | openssl sha1 -binary | xxd -p) && \
+    NUMLINES=$(awk 'END {print NR}' < $PATCHFILE) && \
     echo "diff checksum:$SHASUM lines:$NUMLINES" | cat - $PATCHFILE > temp.patch && \
     mv temp.patch $PATCHFILE
+```
 
-# Make an empty patch file to signal that there's no patch available for the
-# next update yet.
+### Make an empty patch file to signal that there's no patch available for the next update yet.
+
+```shell
 touch patches/v1.0.2-m-28334180-60.patch
 ```

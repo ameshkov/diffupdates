@@ -86,8 +86,8 @@ In order to support batch updates and be able to validate patch result, the stan
 `diff name:[name] checksum:[checksum] lines:[lines]`
 
 * `name` - name of a corresponding filter list. It is only mandatory when [resource name](#resource-name) is specified in the list.
-* `checksum` - the expected SHA1 checksum of the file after the patch is applied. This is used to validate the patch.
-* `lines` - the number of lines that follow that make up the RCS diff block. Note, that `lines` are counted using the same algorithm as used by `wc -l`, i.e. it basically counts `\n`.
+* `checksum` - the expected SHA1 checksum of the file after the patch is applied. This is used to validate the patch. Empty lines, all leading and trailing whitespace, and the newline character at the end of file is discarded before computing the checksum.
+* `lines` - the number of lines that follow that make up the RCS diff block.
 
 `diff` directive is optional. If it is not specified, the patch is applied without validation.
 
